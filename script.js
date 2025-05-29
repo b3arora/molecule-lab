@@ -1,5 +1,8 @@
 const molly = document.getElementById("molly")
 molly.style.display = 'none';
+const wavingMolly = ["molly-2.png", "molly-3.png"]
+const lonePairMolly = ["molly.png", "lonepair.png", "lonepair-2.png"]
+let i = 0
 
 const cylinder1 = document.querySelector("#cylinder-1")
 const cylinder2 = document.querySelector("#cylinder-2")
@@ -19,7 +22,7 @@ let levels = [{
     name: "water",
     bondType: "single",
     bondAngle: 104.5,
-    help: ["stuck? don't worry, i'm here to help!", "hi, i'm molly^300", "to work out bond angles, we need to know how many bp and lp are present", "bp being bonded pairs, lp being lone pairs", "as you can see, O is the central atom, surrounded by 2 H's", "we will use the number of electrons the central atom has", ".^200.^200.and the number of electrons the surrounding atoms need", "adding them together: 6 from the oxygen, 2 from the hydrogen x 2", "8 electrons in total, therefore 4 pairs", "4 pairs give the molecule a tet^200ra^150hedral orbital shape", "2 bonds and therefore bonded pairs can be seen", "so there must be 2 lone pairs to account for the 4 pairs in total", "each lone pair decreases the bond angle by 2.5°", "since the bond angle of a tetrahedral shape with no lone pairs is usually 109.5.^300.^300.", "try it now!"]
+    help: ["stuck? don't worry, i'm here to help!", "hi, i'm molly^300", ":D", "to work out bond angles, we need to know how many bp and lp are present", "bp being bonded pairs, lp being lone pairs", "as you can see, O is the central atom, surrounded by 2 H's", "we will use the number of electrons the central atom has", ".^200.^200.and the number of electrons the surrounding atoms need", "adding them together: 6 from the oxygen, 2 from the hydrogen x 2", "8 electrons in total, therefore 4 pairs", "4 pairs give the molecule a tet^200ra^150hedral orbital shape", "2 bonds and therefore bonded pairs can be seen", "so there must be 2 lone pairs to account for the 4 pairs in total", "each lone pair decreases the bond angle by 2.5°", "see?", "since the bond angle of a tetrahedral shape with no lone pairs is usually 109.5.^300.^300.", "try it now!"]
 }, {
     name: "carbon dioxide",
     bondType: "double",
@@ -30,20 +33,29 @@ let levels = [{
     colourExtra: "#851b11",
     help: ["here we have carbon as the central atom, and 2 surrounding oxygens", "carbon has 4 electrons, oxygen need 2 electrons", "so.^300.^300.the total number of electrons is 4 + (2 x 2)", "giving us 8 electrons, and therefore 4 pairs", "as you can see, the double bonds mean there are 4 bonds in total", "so no electrons are left over for lone pairs", "and the linear shape is therefore not distorted!", "so enter the bond angle for a linear molecule^300.^300.^300can you remember it?"]
 
+}, {
+    name: "sulfur dioxide",
+    bondType: "double",
+    bondAngle: 120,
+    radiusCentral: 0.2,
+    colourCentral: "yellow",
+    radiusExtra: 0.2,
+    colourExtra: "#851b11",
+    help: []
 }]
 const angles = [180, 180, 120, 109.5, 107, 104.5, 90]
     
 
 document.addEventListener("keydown", (event) => {
-    if (event.key === "w") {
-        if (clickNo < 7) {
-            document.querySelector("#bondAngle").setAttribute("value",`angle: ${angles[clickNo]}`)
+    if (event.key === "l") {
+        if (clickNo < 6) {
+            //document.querySelector("#bondAngle").setAttribute("value",`angle: ${angles[clickNo]}`)
             clickNo = clickNo + 1
             newBondAngle(clickNo);
         }
-    } else if (event.key === "s") {
+    } else if (event.key === "p") {
         if (clickNo > 0) {
-            document.querySelector("#bondAngle").setAttribute("value",`angle: ${angles[clickNo]}`)
+            //document.querySelector("#bondAngle").setAttribute("value",`angle: ${angles[clickNo]}`)
             clickNo = clickNo - 1;
             newBondAngle(clickNo);
         }
@@ -64,8 +76,24 @@ document.addEventListener("keydown", (event) => {
     } else if (event.key === "?") {
         const typed = new Typed('.element', {
             strings: levels[level].help,
-            typeSpeed: 50
-        })
+            typeSpeed: 50,
+            smartBackspace: true,
+            onStringTyped: (arrayPos, self) => {
+                if (self.strings[arrayPos] === ":D") {
+                    document.querySelector(".element").innerHTML = "";
+                    self.stop()
+                    wavingAnimation().then(() => {
+                        self.start()
+                    });
+                } else if (self.strings[arrayPos] === "see?") {
+                    document.querySelector(".element").innerHTML = "";
+                    self.stop()
+                    lonePairAnimation().then(() => {
+                        self.start()
+                    });
+                }
+            }
+        });
         molly.style.display = 'block';
     }
 })
@@ -75,6 +103,29 @@ function newBondAngle(clickNo) {
         moleculeRotation.setAttribute("rotation", `0 0 ${-15*clickNo}`)
     }
 }
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+async function wavingAnimation() {
+for (let image = 0; image < 7; image++) {
+        molly.src = wavingMolly[i]
+        i = (i + 1) % wavingMolly.length;
+        await sleep (500)
+    }
+    
+}
+
+
+async function lonePairAnimation() {
+    for (let image2 = 0; image2 < 4; image2++) {
+        molly.src = lonePairMolly[i]
+        i = (i + 1) % lonePairMolly.length;
+        await sleep(500)
+    }
+}
+
 
 function newLevel(difficulty) {
     if (level < 3) {

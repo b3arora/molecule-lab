@@ -4,6 +4,32 @@
 
 }
 
+@keyframes waving {
+    0%{background-image: url("molly.png");}
+    20%{background-image: url("molly-2.png");}
+    40%{background-image: url("molly-3.png");}
+    60%{background-image: url("molly-2.png");}
+    80%{background-image: url("molly-3.png");}
+    100%{background-image: url("molly-2.png");}
+}
+
+.waving {
+    width: 100px;
+    animation: waving 4s ease;
+}
+
+@keyframes lone-pair {
+    0%{background-image: url("molly.png")}
+    50%{background-image: url("lonepair.png")}
+    100%{background-image: url("lonepair-2.png")}
+}
+
+.lone-pair {
+    width: 100px;
+    height: auto;
+    animation: lone-pair 3s ease;
+}
+
 #text-box {
     display: inline-block;
     align-items: center;
@@ -23,5 +49,5 @@
   }
 
 body {
-    font: "pixel-boy", sans-serif;
+    font-family: "pixel-boy", sans-serif;
 }
