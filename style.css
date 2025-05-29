@@ -1,0 +1,27 @@
+@font-face{
+   font-family: "pixel-boy";
+   src: url("https://hc-cdn.hel1.your-objectstorage.com/s/v3/17607df21532f2ca2c23a94a8f2136cebd47e4ed_web437_ibm_ps-55_re.ttf") format("truetype");
+
+}
+
+#text-box {
+    display: inline-block;
+    align-items: center;
+}
+
+.element {
+    display: inline;
+    white-space: nowrap;
+}
+
+#molly {
+    display: block;
+    width: 100px;
+    height: auto;
+    position: absolute;
+    right: 5%
+  }
+
+body {
+    font: "pixel-boy", sans-serif;
+}
