@@ -2,7 +2,7 @@ const molly = document.getElementById("molly")
 molly.style.display = 'none';
 const wavingMolly = ["molly-2.png", "molly-3.png"]
 const lonePairMolly = ["molly.png", "lonepair.png", "lonepair-2.png"]
-let i = 0
+let animating = false
 
 const cylinder1 = document.querySelector("#cylinder-1")
 const cylinder2 = document.querySelector("#cylinder-2")
@@ -11,8 +11,10 @@ const double2 = document.querySelector("#double-2")
 double1.setAttribute("visible", false);
 double2.setAttribute("visible", false);
 
+document.querySelector("#level-2").setAttribute("visible", false);
+
 const checking = document.querySelector("#marking")
-const moleculeRotation = document.querySelector("#bondGroup")
+let moleculeRotation = document.querySelector("#bondGroup")
 let atomHeight = 0.5
 let angleIncrease = -45
 let bondHeight = 0.7
@@ -22,7 +24,7 @@ let levels = [{
     name: "water",
     bondType: "single",
     bondAngle: 104.5,
-    help: ["stuck? don't worry, i'm here to help!", "hi, i'm molly^300", ":D", "to work out bond angles, we need to know how many bp and lp are present", "bp being bonded pairs, lp being lone pairs", "as you can see, O is the central atom, surrounded by 2 H's", "we will use the number of electrons the central atom has", ".^200.^200.and the number of electrons the surrounding atoms need", "adding them together: 6 from the oxygen, 2 from the hydrogen x 2", "8 electrons in total, therefore 4 pairs", "4 pairs give the molecule a tet^200ra^150hedral orbital shape", "2 bonds and therefore bonded pairs can be seen", "so there must be 2 lone pairs to account for the 4 pairs in total", "each lone pair decreases the bond angle by 2.5°", "see?", "since the bond angle of a tetrahedral shape with no lone pairs is usually 109.5.^300.^300.", "try it now!"]
+    help: ["stuck? don't worry, i'm here to help!", "hi, i'm molly^300", ":D", "to work out bond angles, we need to know how many bp and lp are present", "bp being bonded pairs, lp being lone pairs", "as you can see, O is the central atom, surrounded by 2 H's", "we will use the number of electrons the central atom has", ".^200.^200.and the number of electrons the surrounding atoms need", "adding them together: 6 from the oxygen, 2 from the hydrogen x 2", "8 electrons in total, therefore 4 pairs", "4 pairs give the molecule a tet^200ra^150hedral orbital shape", "2 bonds and therefore bonded pairs can be seen", "so there must be 2 lone pairs to account for the 4 pairs in total", "each lone pair decreases the bond angle by 2.5°", "see?", "since the bond angle of a tetrahedral shape with no lone pairs is usually 109.5.^300.^300.", "try it now!", ""]
 }, {
     name: "carbon dioxide",
     bondType: "double",
@@ -43,7 +45,7 @@ let levels = [{
     colourExtra: "#851b11",
     help: []
 }]
-const angles = [180, 180, 120, 109.5, 107, 104.5, 90]
+const angles = [180, 120, 109.5, 107, 104.5, 90]
     
 
 document.addEventListener("keydown", (event) => {
@@ -78,54 +80,17 @@ document.addEventListener("keydown", (event) => {
             strings: levels[level].help,
             typeSpeed: 50,
             smartBackspace: true,
-            onStringTyped: (arrayPos, self) => {
-                if (self.strings[arrayPos] === ":D") {
-                    document.querySelector(".element").innerHTML = "";
-                    self.stop()
-                    wavingAnimation().then(() => {
-                        self.start()
-                    });
-                } else if (self.strings[arrayPos] === "see?") {
-                    document.querySelector(".element").innerHTML = "";
-                    self.stop()
-                    lonePairAnimation().then(() => {
-                        self.start()
-                    });
-                }
-            }
         });
         molly.style.display = 'block';
+        mollyAnimations()
     }
 })
 
 function newBondAngle(clickNo) {
-    if (clickNo < 7) {
-        moleculeRotation.setAttribute("rotation", `0 0 ${-15*clickNo}`)
+    if (clickNo < 6) {
+        moleculeRotation.setAttribute("rotation", `0 0 ${-18*clickNo}`)
     }
 }
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-async function wavingAnimation() {
-for (let image = 0; image < 7; image++) {
-        molly.src = wavingMolly[i]
-        i = (i + 1) % wavingMolly.length;
-        await sleep (500)
-    }
-    
-}
-
-
-async function lonePairAnimation() {
-    for (let image2 = 0; image2 < 4; image2++) {
-        molly.src = lonePairMolly[i]
-        i = (i + 1) % lonePairMolly.length;
-        await sleep(500)
-    }
-}
-
 
 function newLevel(difficulty) {
     if (level < 3) {
@@ -142,6 +107,45 @@ function newLevel(difficulty) {
         document.querySelector("#center").setAttribute("color", levels[level].colourCentral)
         document.querySelector("#atom-2").setAttribute("color", levels[level].colourExtra)
         document.querySelector("#atom-3").setAttribute("color", levels[level].colourExtra)
+    } else if (level > 2 && level < 6) {
+        document.querySelector("#level-1").setAttribute("visible", false);
+        document.querySelector("#level-2").setAttribute("visible", true);
+        document.addEventListener("click", (event) => {
+            if (event.target.matches("#atom-4")) {
+
+            } else if (event.target.matches("#atom-5")) {
+
+            }
+        })
+
     }
 
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function mollyAnimations() {
+    setTimeout(() => {
+        if (i != 3) {
+                (async () => {
+                molly.src = wavingMolly[i]
+                i = (i + 1)
+                await sleep(500)
+            })
+        }
+    }, 5000)
+    setTimeout(() => {
+        (async() => {
+            let i = 0
+            molly.src = lonePairMolly[i]
+            i = (i + 1) % lonePairMolly.length
+            if (i === 0) {
+                molly.src = "molly.png"
+            }
+            await sleep(500)
+        })
+        
+    })
 }
